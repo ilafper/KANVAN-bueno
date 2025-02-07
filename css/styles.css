@@ -1,0 +1,123 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.task {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 3px;
+    cursor: grab;
+}
+
+.task:active {
+    cursor: grabbing;
+}
+
+.column {
+    min-height: 200px;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.column.over {
+    background-color: #f0f0f0;
+}
+
+/*lOGIN*/
+
+.content{
+    width: 20%;
+}
+
+
+/* Submit Button */
+.boton {
+    border: none;
+    background-color: #3b82f6;
+    padding: 12px;
+    font-weight: bold;
+    border-radius: 5px;
+    color: white;
+}
+
+.boton:hover {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+
+a {
+    color: #1e3a8a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+p {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/*TABLERO KANVAN*/
+.enca {
+    display: flex;
+    justify-content: space-between; /* Separa el título a la izquierda y la imagen a la derecha */
+    align-items: center;
+    background-color: #8ddf78;
+    color: white;
+    padding: 1%;
+}
+
+.tit2 {
+    font-weight: bold;
+    font-size: 70px;
+    flex-grow: 1; /* Hace que el título ocupe el espacio necesario sin afectar el botón */
+    text-align: center; /* Centra el texto */
+    margin: 0; /* Evita márgenes inesperados */
+}
+
+.colu{
+    width: 20%;
+}
+
+
+
+.derec {
+    display: flex;
+    align-items: center;
+}
+
+.process{
+    border:1px solid black;
+    padding: 4%;
+}
+
+.azulito{
+    box-shadow: 5px 5px #3a1de1;
+}
+
+.naranja{
+    box-shadow: 5px 5px #fea50f;
+}
+
+.morado{
+    box-shadow: 5px 5px #771f75;
+}
+.verde{
+    box-shadow: 5px 5px #377c2a;
+}
+
+.nueva-tarea {
+    margin-top: 5%;
+    background-color: #c9c9c9;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    padding: 5%;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.nueva-tarea:hover {
+    transform: translateY(-2px);
+}
