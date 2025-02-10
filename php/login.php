@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($encontrado && $contra === $encontrado["password"]) {
             // Guardar el ID del usuario en la sesión
             $_SESSION["usuario_id"] = (string) $encontrado["_id"];  // Convertir el ObjectId a string
-            
+            $_SESSION["usuario_nombre"] = $encontrado["nombre"];
             header("location:../html/index.html");
         } else {
             header("location:../html/login.html");

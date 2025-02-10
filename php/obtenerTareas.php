@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $tareasCollection = $db->selectCollection("tareas");
 
         // Obtener el ID del usuario logueado
-        $usuarioId = $_SESSION["usuario_id"] ?? null; // Asegúrate de tener el ID del usuario en la sesión
+        $usuarioId = $_SESSION["usuario_id"] ?? null;
 
         if (!$usuarioId) {
             echo json_encode(["success" => false, "error" => "Usuario no autenticado"]);
@@ -23,13 +23,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         // Buscar tareas donde el usuario sea creador o colaborador
         $tareas = $tareasCollection->find([
             '$or' => [
-                ['creador' => $usuarioId],
-                ['colaboradores' => $usuarioId]
+                ['creador' => $_SESSION["usuario_nombre"]],  // Comparar con el nombre del creador
+                ['colaboradores' => $_SESSION["usuario_nombre"]] // Comparar con la lista de nombres de colaboradores
             ]
         ]);
 
-        // Convertir el cursor a un array
-        $tareasArray = iterator_to_array($tareas);
+        // Convertir el cursor a un array con los datos necesarios
+        $tareasArray = [];
+        foreach ($tareas as $tarea) {
+            $tareasArray[] = [
+                "estado"=>$tarea["estado"],
+                "titulo" => $tarea["titulo"],
+                "descripcion" => $tarea["descripcion"],
+                "creador" => $tarea["creador"], // Directamente el nombre del creador
+                "colaboradores" => $tarea["colaboradores"] ?? [] // Lista de strings con nombres de colaboradores
+            ];
+        }
 
         // Retornar las tareas en formato JSON
         echo json_encode([

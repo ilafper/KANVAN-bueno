@@ -1,38 +1,5 @@
 $(document).ready(function () {
-    //efecto cartas y eso
-    // Permitir que las tareas sean arrastrables
-    $(".task").on("dragstart", function (e) {
-        e.originalEvent.dataTransfer.setData("text/plain", e.target.textContent);
-    });
 
-    // Permitir que las columnas acepten tareas arrastradas
-    $(".column").on("dragover", function (e) {
-        e.preventDefault();
-        $(this).addClass("over");
-    });
-
-    // Eliminar la clase "over" cuando se deja de arrastrar
-    $(".column").on("dragleave", function () {
-        $(this).removeClass("over");
-    });
-
-    // Manejar el evento de soltar la tarea en una columna
-    $(".column").on("drop", function (e) {
-        e.preventDefault();
-        $(this).removeClass("over");
-
-        // Obtener el contenido de la tarea arrastrada
-        const taskContent = e.originalEvent.dataTransfer.getData("text/plain");
-
-        // Crear una nueva tarea y agregarla a la columna
-        const newTask = $("<div>").addClass("task card mb-2").attr("draggable", true).text(taskContent);
-        $(this).append(newTask);
-
-        // Eliminar la tarea original (opcional, si no quieres duplicar tareas)
-        $(".task").filter(function () {
-            return $(this).text() === taskContent;
-        }).not(newTask).remove();
-    });
 
     /*OBTENER LOS COLABOLADORES */
     $(".nueva-tarea").click(function () {
@@ -73,13 +40,16 @@ $(document).ready(function () {
         let titulo = $('#titulo').val();
         let descripcion = $('#descripcion').val();
         let colaboradores = [];
-        
+        let estado = "idea";  // Establecer el estado de la tarea como "idea" por defecto
+    
         // Obtener los colaboradores seleccionados
         $('#colaboradores input:checked').each(function () {
             colaboradores.push($(this).val());
         });
+    
         // Obtener el ID del creador (si está en el front-end)
         let creador = $('#usuario_id').val();  // O lo que sea necesario para obtener el ID del creador
+    
         // Enviar los datos al servidor
         $.ajax({
             url: '../php/nuevaTarea.php',
@@ -88,7 +58,8 @@ $(document).ready(function () {
                 titulo: titulo,
                 descripcion: descripcion,
                 colaboradores: colaboradores,  // Enviar los colaboradores
-                creador: creador  // Enviar el ID del creador
+                creador: creador,  // Enviar el ID del creador
+                estado: estado  // Enviar el estado de la tarea
             },
             success: function (response) {
                 let res = JSON.parse(response);
@@ -115,22 +86,74 @@ $(document).ready(function () {
         success: function (response) {
             if (response.success) {
                 const tareas = response.tareas;
-                let listaTareas = $("#idea");
-
+                let listaTareas = $("#idea"); // Aquí puedes modificar según la columna en la que quieras mostrar las tareas
+    
                 // Vaciar el contenedor antes de agregar las nuevas tareas
                 listaTareas.empty();
-
+    
                 // Recorrer las tareas y agregar al contenedor
                 tareas.forEach(tarea => {
-                    listaTareas.append(`
-                        <div class="tarea">
-                            <h3>${tarea.titulo}</h3>
-                            <p>${tarea.descripcion}</p>
-                            <p><strong>Creador:</strong> ${tarea.creador}</p>
-                            <p><strong>Colaboradores:</strong> ${tarea.colaboradores.join(', ')}</p>
+                    listaTareas.append(`    
+                        <div class="tarea" data-id="${tarea._id}" data-titulo="${tarea.titulo}" data-estado="${tarea.estado}" data-descripcion="${tarea.descripcion}" data-colaboradores="${tarea.colaboradores.join(',')}">
+                            <h3 class="titulo-tarea">${tarea.titulo}</h3>
+                            <p class="descripcion-tarea">${tarea.descripcion}</p>
                         </div>
                     `);
                 });
+    
+                // Evento para mostrar los detalles de la tarea en un modal
+                $(".tarea").on("click", function () {
+                    let tareaId = $(this).data("id");
+                    let titulo = $(this).data("titulo");
+                    let descripcion = $(this).data("descripcion");
+                    let colaboradores = $(this).data("colaboradores");
+                    let estado = $(this).data("estado");  // Obtener el estado
+    
+                    // Llenar el modal con los datos de la tarea
+                    $("#detalleTareaId").val(tareaId);
+                    $("#detalleTitulo").text(titulo);
+                    $("#detalleDescripcion").text(descripcion);
+                    $("#detalleColaboradores").text(colaboradores);
+                    $("#detalleEstado").text(estado);  // Mostrar el estado en el modal
+    
+                    // Mostrar el modal
+                    $("#detalleTareaModal").modal("show");
+                });
+                $("#eliminarTarea").on("click", function () {
+                    let tareaId = $("#detalleTareaId").val();  // Obtener el ID de la tarea desde el campo oculto en el modal
+                    
+                    
+                    if (tareaId) {
+                        if (confirm("¿Estás seguro de que deseas eliminar esta tarea?")) {
+                            $.ajax({
+                                url: "../php/eliminarTarea.php",
+                                type: "POST",
+                                data: {
+                                    tareaId: tareaId  // ID de la tarea a eliminar
+                                },
+                                success: function (response) {
+                                    let res = JSON.parse(response);
+                                    if (res.success) {
+                                        alert(res.message);
+                                        // Eliminar la tarea de la interfaz
+                                        $(`.tarea[data-id=${tareaId}]`).remove();
+                                        // Cerrar el modal
+                                        $("#detalleTareaModal").modal("hide");
+                                    } else {
+                                        alert("Error: " + res.error);
+                                    }
+                                },
+                                error: function () {
+                                    alert("Error al eliminar la tarea.");
+                                }
+                            });
+                        }
+                    } else {
+                        alert("No se ha encontrado el ID de la tarea.");
+                    }
+                });
+
+
             } else {
                 alert("No se pudieron obtener las tareas.");
             }
@@ -139,4 +162,7 @@ $(document).ready(function () {
             alert("Error al obtener las tareas.");
         }
     });
+
+    
+
 });

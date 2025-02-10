@@ -2,16 +2,7 @@ body {
     background-color: #f8f9fa;
 }
 
-.task {
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 3px;
-    cursor: grab;
-}
 
-.task:active {
-    cursor: grabbing;
-}
 
 .column {
     min-height: 200px;
@@ -24,13 +15,6 @@ body {
 }
 
 /*lOGIN*/
-
-.content{
-    width: 20%;
-}
-
-
-/* Submit Button */
 .boton {
     border: none;
     background-color: #3b82f6;
@@ -45,6 +29,21 @@ body {
     border-color: #3b82f6;
 }
 
+
+a {
+    color: #1e3a8a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+p {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.content{
+    width: 20%;
+}
 
 a {
     color: #1e3a8a;
@@ -107,6 +106,7 @@ p {
 }
 
 .nueva-tarea {
+    width: 100%;
     margin-top: 5%;
     background-color: #c9c9c9;
     color: white;
@@ -120,4 +120,56 @@ p {
 }
 .nueva-tarea:hover {
     transform: translateY(-2px);
+}
+
+
+.tarea {
+    width: 100%;
+    cursor: pointer;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5%;
+    margin-bottom: 15px;
+}
+
+.tarea:hover {
+    transform: translateY(-5px);
+}
+
+
+#eliminarTarea {
+    background-color: #dc3545; /* Color rojo para indicar acción destructiva */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+    margin-right: 10px; /* Espacio entre los botones */
+}
+
+#eliminarTarea:hover {
+    background-color: #c82333; /* Rojo más oscuro al pasar el mouse */
+    transform: translateY(-2px); /* Desplazamiento hacia arriba al pasar el mouse */
+}
+
+/* Estilos para el botón de Modificar */
+#modificarTarea {
+    background-color: #28a745; /* Verde para indicar acción positiva */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+#modificarTarea:hover {
+    background-color: #218838; /* Verde más oscuro al pasar el mouse */
+    transform: translateY(-2px); /* Desplazamiento hacia arriba al pasar el mouse */
 }

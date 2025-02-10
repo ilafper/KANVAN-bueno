@@ -8,11 +8,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
 </head>
+
 <body>
+
     <section class="enca">
         <h1 class="tit2 text-center mb-4">Tablero Kanban</h1>
         <section class="derec">
-            
             <a href="../php/cerrar.php"><img src="../src/cerrar-sesion.png" width="50" alt="Cerrar sesión"></a>
         </section>
     </section>
@@ -20,6 +21,7 @@
     <div class="container-fluid mt-4">
         
         <div class="row d-flex justify-content-center">
+            
             <!-- Columna IDEA -->
             <div class="colu">
                 <div>
@@ -68,8 +70,44 @@
         </div>
     </div>
 
-    <!--NUEVA TAREA MODAL-->
+    <!--DETALLES TAREA VER-->
+    <div class="modal fade" id="detalleTareaModal" tabindex="-1" aria-labelledby="detalleTareaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detalleTareaLabel">Detalles de la Tarea</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="detalleTareaId"> <!-- ID de la tarea -->
     
+                    <div class="mb-3">
+                        <p><strong>Título:</strong><span id="detalleTitulo"></span></p>
+                    </div>
+    
+                    <div class="mb-3">
+                        <p><strong>Descripción:</strong> <span id="detalleDescripcion"></span></p>
+                    </div>
+                    <div class="mb-3">
+                        <p><strong>Estado:</strong> <span id="detalleEstado"></span></p>
+                    </div>
+                    <div class="mb-3">
+                        <p><strong>Colaboradores:</strong> <span id="detalleColaboradores"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Botones para eliminar o modificar, puedes deshabilitarlos si no quieres permitir la edición -->
+                    <button type="button" id="eliminarTarea" >Eliminar</button>
+                    <button type="button" id="modificarTarea" >Modificar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+
+    <!--NUEVA TAREA MODAL-->
     <div class="modal fade" id="tareaModal" tabindex="-1" aria-labelledby="tareaModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -101,6 +139,7 @@
 
    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/js.js"></script>
 </body>

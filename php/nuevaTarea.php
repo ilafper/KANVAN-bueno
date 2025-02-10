@@ -1,10 +1,12 @@
 <?php
 session_start();
 require('../vendor/autoload.php');
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $titulo = $_POST["titulo"] ?? null;
     $descripcion = $_POST["descripcion"] ?? null;
-    $colaboradores = $_POST["colaboradores"] ?? [];  // Obtener los colaboradores
+    $colaboradores = $_POST["colaboradores"] ?? [];  // Obtener IDs de los colaboradores
+    $estado = $_POST["estado"] ?? "idea"; // Si no se pasa, se establece por defecto como "idea"
     if (empty($titulo) || empty($descripcion)) {
         echo json_encode(["success" => false, "error" => "Datos incompletos"]);
         exit;
@@ -20,31 +22,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $tareasCollection = $db->selectCollection("tareas");
         $usuariosCollection = $db->selectCollection("usuarios");
 
-        // Obtener datos del creador
-        $creadorId = $_SESSION["usuario_id"] ?? null;
-        $creadorNombre = $_SESSION["usuario_nombre"] ?? "Desconocido";  // Asume que tienes el nombre en la sesión
+        // Obtener nombre del creador
+        $creadorNombre = $_SESSION["usuario_nombre"] ?? "Anónimo";
+
+        // Obtener nombres de colaboradores y guardarlos en una lista
+        $colaboradoresNombres = [];
+        foreach ($colaboradores as $colaboradorId) {
+            $usuarioColaborador = $usuariosCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($colaboradorId)]);
+            if ($usuarioColaborador) {
+                $colaboradoresNombres[] = $usuarioColaborador["nombre"]; // Guardar solo el nombre
+            }
+        }
 
         // Datos de la nueva tarea
         $nuevaTarea = [
             "titulo" => $titulo,
             "descripcion" => $descripcion,
-            "creador" => [
-                "id" => $creadorId,
-                "nombre" => $creadorNombre
-            ],
-            "colaboradores" => []  // Almacenar los colaboradores con su ID y nombre
+            "creador" => $creadorNombre,
+            "estado" => $estado,
+            "colaboradores" => $colaboradoresNombres
         ];
-
-        // Obtener los nombres y IDs de los colaboradores
-        foreach ($colaboradores as $colaboradorId) {
-            $usuarioColaborador = $usuariosCollection->findOne(['_id' => new MongoDB\BSON\ObjectId($colaboradorId)]);
-            if ($usuarioColaborador) {
-                $nuevaTarea['colaboradores'][] = [
-                    "id" => (string)$usuarioColaborador["_id"],
-                    "nombre" => $usuarioColaborador["nombre"]
-                ];
-            }
-        }
 
         // Insertar la tarea en la base de datos
         $resultado = $tareasCollection->insertOne($nuevaTarea);
@@ -55,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             echo json_encode(["success" => false, "error" => "No se pudo crear la tarea"]);
         }
     } catch (Exception $error) {
-        error_log($error->getMessage()); // Registra el error para que puedas revisar los detalles en los logs del servidor
+        error_log($error->getMessage());
         http_response_code(500);
         echo json_encode(["success" => false, "error" => "Error del servidor: " . $error->getMessage()]);
     }
