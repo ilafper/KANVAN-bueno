@@ -170,20 +170,19 @@ $(document).ready(function () {
                     // Obtener los datos de la tarea desde el modal de detalles
                     const tareaId = $('#idTarea').val();
                     const estado = $('#detalleEstado').text();
-                    const creador = $('#detalleCreador').text();
+                    const creador =$('#detalleCreador').text();
                     const titulo = $('#detalleTitulo').text();
                     const descripcion = $('#detalleDescripcion').text();
-                    const colaboradores = $('#detalleColaboradores').text().split(', '); // Aquí asegúrate de que esto devuelva un array con los nombres
-                    console.log(tareaId, estado, creador, titulo, descripcion, colaboradores);
-                
-                    // Establecer valores en los campos del formulario
+                    const colaboradores = $('#detalleColaboradores').text().split(', ');
+                    console.log(tareaId,estado,creador,titulo,descripcion,colaboradores);
+                    
                     $('#creadorTarea').val(creador);
                     $('#idTareaModificar').val(tareaId);
                     $('#tituloModificar').val(titulo);
                     $('#descripcionModificar').val(descripcion);
                     $('#estadoTarea').val(estado);
+                    $('#colaboradoresModificar').val(colaboradores);
                     
-                
                     // Obtener los usuarios disponibles para colaborar
                     $.ajax({
                         url: "../php/obtenerUsuarios.php", // URL para obtener los usuarios disponibles
@@ -191,13 +190,16 @@ $(document).ready(function () {
                         dataType: "json",
                         success: function (response) {
                             if (response.success) {
+                                let lista = $("#colaboradoresModificar");
+                                lista.empty(); // Limpiar la lista de colaboradores
+                
                                 // Recorrer los usuarios y agregar solo los que no son el creador
                                 response.usuarios.forEach(usuario => {
-                                    // Comprobar si el usuario está en los colaboradores de la tarea (basado en los IDs)
-                                    const checked = colaboradores.includes(usuario.nombre) ? 'checked' : '';    
+                                    // Comprobar si el usuario está en los colaboradores de la tarea
+                                    const checked = colaboradores.includes(usuario.id) ? 'checked' : '';    
                 
                                     // Agregar el checkbox correspondiente con el valor de 'checked' si está asignado
-                                    $('#colaboradoresModificar').append(
+                                    lista.append(
                                         `<label>
                                             <input type="checkbox" value="${usuario.id}" data-nombre="${usuario.nombre}" class="colaborador-nuevo" ${checked}>
                                             ${usuario.nombre}

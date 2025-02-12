@@ -1,5 +1,5 @@
 <?php
-session_start(); // Asegúrate de que la sesión esté activa para obtener el usuario logueado
+session_start();
 require('../vendor/autoload.php');
 
 try {
@@ -35,4 +35,5 @@ try {
     http_response_code(500);
     echo json_encode(["success" => false, "error" => "Error del servidor: " . $error->getMessage()]);
 }
+
 ?>

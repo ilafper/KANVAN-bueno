@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $tareasArray = [];
         foreach ($tareas as $tarea) {
             $tareasArray[] = [
+                "id" => (string) $tarea["_id"], 
                 "estado"=>$tarea["estado"],
                 "titulo" => $tarea["titulo"],
                 "descripcion" => $tarea["descripcion"],

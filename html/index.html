@@ -28,7 +28,7 @@
                     <div class="process azulito">
                         <h5 class="card-title text-center">IDEA</h5>
                     </div>
-                    <button class="nueva-tarea" data-bs-toggle="modal" data-bs-target="#tareaModal">Nueva tarea</button>
+                    <button class="nueva-tarea" data-bs-toggle="modal" data-bs-target="#tareaModal">+ Nueva tarea</button>
                     <div class="card-body column" id="idea">
                         <!-- Tareas aquí -->
                     </div>
@@ -79,7 +79,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="detalleTareaId"> <!-- ID de la tarea -->
+                    <input type="hidden" id="idTarea">
+                    
     
                     <div class="mb-3">
                         <p><strong>Título:</strong><span id="detalleTitulo"></span></p>
@@ -90,6 +91,9 @@
                     </div>
                     <div class="mb-3">
                         <p><strong>Estado:</strong> <span id="detalleEstado"></span></p>
+                    </div>
+                    <div class="mb-3">
+                        <p><strong>Creador:</strong> <span id="detalleCreador"></span></p>
                     </div>
                     <div class="mb-3">
                         <p><strong>Colaboradores:</strong> <span id="detalleColaboradores"></span></p>
@@ -136,7 +140,43 @@
         </div>
     </div>
 
-
+    <!--modificar modal-->
+    <div class="modal fade" id="tareaModalModi" tabindex="-1" aria-labelledby="tareaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tareaModalLabel">Modificar Tarea</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTareaModificar">
+                        <input type="hidden" id="idTareaModificar"> <!-- Campo oculto para el ID de la tarea -->
+                        <input type="hidden" id="estadoTarea">
+                        <input type="hidden" id="creadorTarea">
+                        <div class="mb-3">
+                            <label for="tituloModificar" class="form-label">Título</label>
+                            <input type="text" class="form-control" id="tituloModificar" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcionModificar" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="descripcionModificar" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Colaboradores</label>
+                            <div id="colaboradoresModificar">
+                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="guardarTareaModificar">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
