@@ -118,19 +118,34 @@ p {
     font-weight: bold;
 }
 .nueva-tarea:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
-
 
 .tarea {
     width: 100%;
+    font-size: 10px;
     cursor: pointer;
     background-color: #f8f9fa;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 5%;
     margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+
+.infor {
+    flex-grow: 1;
+}
+
+.botones {
+    display: flex;
+}
+.botones i{
+    font-size: 30px;
+}
+
 
 .tarea:hover {
     transform: translateY(-5px);
