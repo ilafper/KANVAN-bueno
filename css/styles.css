@@ -91,18 +91,18 @@ p {
 }
 
 .azulito{
-    box-shadow: 5px 5px #3a1de1;
+    box-shadow: 10px 10px #3a1de1;
 }
 
 .naranja{
-    box-shadow: 5px 5px #fea50f;
+    box-shadow: 10px 10px #fea50f;
 }
 
 .morado{
-    box-shadow: 5px 5px #771f75;
+    box-shadow: 10px 10px #771f75;
 }
 .verde{
-    box-shadow: 5px 5px #377c2a;
+    box-shadow: 10px 10px #377c2a;
 }
 
 .nueva-tarea {

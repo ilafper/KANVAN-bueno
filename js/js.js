@@ -96,7 +96,7 @@ $(document).ready(function () {
                     let listaTareas = $(`#${tarea.estado.toLowerCase()}`);
 
                     listaTareas.append(`
-                    <div class="tarea" data-id="${tarea.id}" data-creador="${tarea.creador}" data-titulo="${tarea.titulo}" data-estado="${tarea.estado}" data-descripcion="${tarea.descripcion}" data-colaboradores="${tarea.colaboradores.join(',')}">
+                    <div class="tarea" data-id="${tarea.id}" data-creador="${tarea.creador}" data-titulo="${tarea.titulo}" data-estado="${tarea.estado}"  data-descripcion="${tarea.descripcion}" data-colaboradores="${tarea.colaboradores.join(',')}">
                         <section class="infor">
                             <h3 class="titulo-tarea">${tarea.titulo}</h3>
                         </section>
@@ -188,7 +188,7 @@ $(document).ready(function () {
                     $('#descripcionModificar').val(descripcion);
                     $('#estadoTarea').val(estado);
 
-
+                    $('#colaboradoresModificar').empty();
                     // Obtener los usuarios disponibles para colaborar
                     $.ajax({
                         url: "../php/obtenerUsuarios.php", // URL para obtener los usuarios disponibles
@@ -274,11 +274,13 @@ $(document).ready(function () {
     });
 
 
-    /*MOVER LA TRAGETA DE COLUMNA CON LAS FLECHAS*/
-    /*FLECHA DERECHA */
+    /* MOVER LA TARJETA DE COLUMNA CON LAS FLECHAS */
+
+    /* FLECHA DERECHA */
     $(document).on("click", ".bx-chevron-right", function (e) {
         e.stopPropagation(); // Evita que el evento se propague al contenedor de la tarea
         e.preventDefault();  // Evita que se realice cualquier acción predeterminada
+
         let tarea = $(this).closest(".tarea");
         let estadoActu = tarea.data("estado");
         let tareaId = tarea.data("id");
@@ -295,6 +297,7 @@ $(document).ready(function () {
             return;
         }
 
+
         $.ajax({
             url: "../php/actualizarEstado.php",
             type: "POST",
@@ -307,11 +310,9 @@ $(document).ready(function () {
                 console.log(response);
                 let res = JSON.parse(response);
                 if (res.success) {
-                    alert("Tarea estado cambiada.");
-                    location.reload();
-                    // Recargar o actualizar la lista de tareas
+                    location.reload(); // Recargar o actualizar la lista de tareas
                 } else {
-                    alert("Error al cambiar el estado.");
+                    // En caso de error, volvemos al estado original de la tarea
                     tarea.detach().appendTo(`#${estadoActu}`).data('estado', estadoActu);
                 }
             },
@@ -320,19 +321,22 @@ $(document).ready(function () {
                 tarea.detach().appendTo(`#${estadoActu}`).data('estado', estadoActu);
             }
         });
-        
+
         return false;
     });
 
-    /*FLECHA IZQUIERDA */
+    /* FLECHA IZQUIERDA */
     $(document).on("click", ".bx-chevron-left", function (e) {
         e.stopPropagation(); // Evita que el evento se propague al contenedor de la tarea
         e.preventDefault();  // Evita que se realice cualquier acción predeterminada
+
         let tarea = $(this).closest(".tarea");
         let estadoActu = tarea.data("estado");
         let tareaId = tarea.data("id");
 
+        // Asignamos estadoAnterior si no está definido previamente
         let nuevoEstado = "";
+
         /* idea → todo → doing → done */
         if (estadoActu === "done") {
             nuevoEstado = "doing";
@@ -341,7 +345,8 @@ $(document).ready(function () {
         } else {
             return;
         }
-        /* Cambiarlo en la interfaz */
+
+        // Cambiar estado en la interfaz (enviar actualización al servidor)
         $.ajax({
             url: "../php/actualizarEstado.php",
             type: "POST",
@@ -354,20 +359,19 @@ $(document).ready(function () {
                 console.log(response);
                 let res = JSON.parse(response);
                 if (res.success) {
-                    alert("Tarea estado cambiada.");
-                    location.reload();
-                    // Recargar o actualizar la lista de tareas
+                    location.reload(); // Recargar o actualizar la lista de tareas
                 } else {
-                    alert("Error al cambiar el estado.");
+                    // En caso de error, volvemos al estado original de la tarea
                     tarea.detach().appendTo(`#${estadoActu}`).data('estado', estadoActu);
                 }
             },
             error: function () {
                 alert("Error al conectar con el servidor.");
+                // En caso de error en la llamada AJAX, volvemos a poner la tarea en su estado original
                 tarea.detach().appendTo(`#${estadoActu}`).data('estado', estadoActu);
             }
         });
-        
+
         return false;
     });
 
