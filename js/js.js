@@ -17,7 +17,7 @@ $(document).ready(function () {
                     // Recorrer los usuarios y agregar solo los que no son el creador
                     response.usuarios.forEach(usuario => {
                         lista.append(
-                            `<label>
+                            `<label class="colabo">
                                 <input type="checkbox" value="${usuario.id}" class="colaborador-nuevo">
                                 ${usuario.nombre}
                             </label><br>`
@@ -179,7 +179,7 @@ $(document).ready(function () {
                     const titulo = $('#detalleTitulo').text();
                     const descripcion = $('#detalleDescripcion').text();
                     const colaboradores = $('#detalleColaboradores').text().split(',').map(c => c.trim());
-                    console.log(tareaId, estado, creador, titulo, descripcion, colaboradores);
+                    //console.log(tareaId, estado, creador, titulo, descripcion, colaboradores);
 
                     // Establecer valores en los campos del formulario
                     $('#creadorTarea').val(creador);
@@ -233,7 +233,7 @@ $(document).ready(function () {
                     $("#colaboradoresModificar input:checked").each(function () {
                         colaboradoresSeleccionadosM.push($(this).data("nombre"));
                     });
-                    console.log(tareaIdM, estadoM, creadorM, tituloM, descripcionM, colaboradoresSeleccionadosM);
+                    //console.log(tareaIdM, estadoM, creadorM, tituloM, descripcionM, colaboradoresSeleccionadosM);
                     // Enviar los datos modificados al servidor
                     $.ajax({
                         url: "../php/modificar.php", // Archivo PHP para guardar los cambios
@@ -250,9 +250,9 @@ $(document).ready(function () {
                         success: function (response) {
                             let res = JSON.parse(response);
                             if (res.success) {
-                                alert("Tarea modificada exitosamente.");
+                                
                                 // Recargar o actualizar la lista de tareas
-                                $('#tareaModalModi').modal('hide');
+                                location.reload();
                             } else {
                                 alert("Error al modificar la tarea.");
                             }
@@ -310,15 +310,13 @@ $(document).ready(function () {
                 console.log(response);
                 let res = JSON.parse(response);
                 if (res.success) {
-                    location.reload(); // Recargar o actualizar la lista de tareas
+                    location.reload();
                 } else {
-                    // En caso de error, volvemos al estado original de la tarea
-                    tarea.detach().appendTo(`#${estadoActu}`).data('estado', estadoActu);
+                    
                 }
             },
             error: function () {
-                alert("Error al conectar con el servidor.");
-                tarea.detach().appendTo(`#${estadoActu}`).data('estado', estadoActu);
+               
             }
         });
 
@@ -334,7 +332,6 @@ $(document).ready(function () {
         let estadoActu = tarea.data("estado");
         let tareaId = tarea.data("id");
 
-        // Asignamos estadoAnterior si no está definido previamente
         let nuevoEstado = "";
 
         /* idea → todo → doing → done */
@@ -361,14 +358,11 @@ $(document).ready(function () {
                 if (res.success) {
                     location.reload(); // Recargar o actualizar la lista de tareas
                 } else {
-                    // En caso de error, volvemos al estado original de la tarea
-                    tarea.detach().appendTo(`#${estadoActu}`).data('estado', estadoActu);
+                   
                 }
             },
             error: function () {
-                alert("Error al conectar con el servidor.");
-                // En caso de error en la llamada AJAX, volvemos a poner la tarea en su estado original
-                tarea.detach().appendTo(`#${estadoActu}`).data('estado', estadoActu);
+            
             }
         });
 

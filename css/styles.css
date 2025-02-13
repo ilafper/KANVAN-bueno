@@ -6,7 +6,6 @@ body {
 
 .column {
     min-height: 200px;
-    padding: 20px;
     border-radius: 5px;
 }
 
@@ -105,16 +104,96 @@ p {
     box-shadow: 10px 10px #377c2a;
 }
 
+/* Nuev tarea modal */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.modal-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.btn-close {
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    color: #777;
+}
+
+.modal-body {
+    padding: 20px 0;
+}
+
+.form-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    padding: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+button.btn-primary {
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.btn-primary:hover {
+    background-color: #0056b3;
+}
+button.btn-primary:disabled {
+    background-color: #ccc;
+}
+
+#colaboradores, #colaboradoresModificar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+
 .nueva-tarea {
     width: 100%;
-    margin-top: 5%;
+    margin-top: 10%;
     background-color: #ffffff;
     color: rgb(0, 0, 0);
-    border: 1px solid black;
-    border-radius: 10px;
-    width: 100%;
-    padding: 5%;
-    font-size: 16px;
+    border: 2px solid black;
+    padding: 2%;
+    font-size: 30px;
     font-weight: bold;
 }
 .nueva-tarea:hover {
@@ -123,20 +202,22 @@ p {
 
 .tarea {
     width: 100%;
-    font-size: 10px;
+    margin-top: 10%;
+    padding: 2%;
     cursor: pointer;
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 5%;
-    margin-bottom: 15px;
+    background-color: #ffffff;
+    border: 2px solid #000000;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.infor h3{
+    font-size: 30px;
+    margin-left: 20px;
+}
 .infor {
-    flex-grow: 1;
+    flex-grow: 1
 }
 
 .botones {
@@ -148,7 +229,7 @@ p {
 
 
 .tarea:hover {
-    transform: translateY(-5px);
+    transform: translateY(-1px);
 }
 
 
