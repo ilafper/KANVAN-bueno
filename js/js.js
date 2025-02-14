@@ -91,6 +91,7 @@ $(document).ready(function () {
                 // Asegurarnos de limpiar todas las columnas antes de agregar nuevas tareas
                 $("#idea, #todo, #doing, #done").empty();
 
+
                 tareas.forEach(tarea => {
                     // Determinar la columna correcta según el estado de la tarea
                     let listaTareas = $(`#${tarea.estado.toLowerCase()}`);
@@ -110,7 +111,7 @@ $(document).ready(function () {
                 });
 
 
-
+                
                 // Evento para mostrar los detalles de la tarea en un modal
                 $(".tarea").on("click", function () {
                     let tareaId = $(this).data("id");
@@ -119,7 +120,7 @@ $(document).ready(function () {
                     let descripcion = $(this).data("descripcion");
                     let colaboradores = $(this).data("colaboradores");
                     let estado = $(this).data("estado");
-
+                
                     // Llenar el modal con los datos de la tarea
                     $("#idTarea").val(tareaId);
                     $("#detalleCreador").text(creator);
@@ -127,10 +128,32 @@ $(document).ready(function () {
                     $("#detalleDescripcion").text(descripcion);
                     $("#detalleColaboradores").text(colaboradores);
                     $("#detalleEstado").text(estado);
-                    // Mostrar el modal
-                    $("#detalleTareaModal").modal("show");
-
+                
+                    // Hacer la petición AJAX para obtener los datos del usuario
+                    $.ajax({
+                        url: "../php/obtenerDatos.php",
+                        type: "GET",
+                        dataType: "json",
+                        success: function (response) {
+                            let userName = response.usuario_nombre; // ID del usuario actual
+                            let UserRol = response.usuario_rol;  // Rol del usuario (admin, colaborador, etc.)
+                
+                            // Verificar si el usuario es el creador de la tarea o administrador
+                            if (creator === userName || UserRol === "admin") {
+                                $("#modificarTarea, #eliminarTarea").show();  // Mostrar botones
+                            } else {
+                                $("#modificarTarea, #eliminarTarea").hide();  // Ocultar botones
+                            }
+                
+                            // Mostrar el modal después de obtener la respuesta
+                            $("#detalleTareaModal").modal("show");
+                        },
+                        error: function () {
+                            alert("Error al obtener los datos del usuario.");
+                        }
+                    });
                 });
+                
 
 
 
@@ -250,7 +273,7 @@ $(document).ready(function () {
                         success: function (response) {
                             let res = JSON.parse(response);
                             if (res.success) {
-                                
+
                                 // Recargar o actualizar la lista de tareas
                                 location.reload();
                             } else {
@@ -312,11 +335,11 @@ $(document).ready(function () {
                 if (res.success) {
                     location.reload();
                 } else {
-                    
+
                 }
             },
             error: function () {
-               
+
             }
         });
 
@@ -358,11 +381,11 @@ $(document).ready(function () {
                 if (res.success) {
                     location.reload(); // Recargar o actualizar la lista de tareas
                 } else {
-                   
+
                 }
             },
             error: function () {
-            
+
             }
         });
 

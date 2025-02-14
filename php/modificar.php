@@ -1,50 +1,49 @@
 <?php
 session_start();
-require('../vendor/autoload.php');
+require 'conexion.php';
 
-// Obtener datos JSON
-$data = json_decode(file_get_contents('php://input'), true);
-
-// Verifica si los datos están presentes
-if (isset($data['id']) && isset($data['titulo']) && isset($data['descripcion']) && isset($data['estado']) && isset($data['creador'])) {
-    $id = $data['id'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $data = json_decode(file_get_contents("php://input"), true);
+    $tareaId = $data['id'];
     $titulo = $data['titulo'];
     $descripcion = $data['descripcion'];
     $estado = $data['estado'];
     $creador = $data['creador'];
-    $colaboradores = isset($data['colaboradores']) ? $data['colaboradores'] : [];
+    $colaboradores = $data['colaboradores'];
+
+    $usuarioActual = $_SESSION['usuario_id'];
+    $rolUsuario = $_SESSION['rol'];
 
     try {
-        // Conexión con MongoDB
-        $uri = 'mongodb+srv://ialfper:ialfper21@alumnos.zoinj.mongodb.net/?retryWrites=true&w=majority&appName=alumnos';
-        $client = new MongoDB\Client($uri);
-        $db = $client->selectDatabase('kanva');
-        $collection = $db->selectCollection('tareas');
+        $collection = $db->tareas;
+        $tarea = $collection->findOne(['_id' => new MongoDB\BSON\ObjectID($tareaId)]);
 
-        // Convertir el id a un ObjectId
-        $objectId = new MongoDB\BSON\ObjectId($id);
+        if (!$tarea) {
+            echo json_encode(['success' => false, 'error' => 'Tarea no encontrada']);
+            exit();
+        }
 
-        // Actualizar los datos de la tarea
-        $result = $collection->updateOne(
-            ['_id' => $objectId], // Filtra por ID
-            ['$set' => [
-                'titulo' => $titulo,
-                'descripcion' => $descripcion,
-                'estado' => $estado,
-                'creador' => $creador,
-                'colaboradores' => $colaboradores
-            ]]
-        );
+        if ($tarea['creador'] == $usuarioActual || $rolUsuario == "admin") {
+            $updateResult = $collection->updateOne(
+                ['_id' => new MongoDB\BSON\ObjectID($tareaId)],
+                ['$set' => [
+                    'titulo' => $titulo,
+                    'descripcion' => $descripcion,
+                    'estado' => $estado,
+                    'colaboradores' => $colaboradores
+                ]]
+            );
 
-        if ($result->getModifiedCount() > 0) {
-            echo json_encode(['success' => true, 'message' => 'Tarea actualizada con éxito']);
+            if ($updateResult->getModifiedCount() > 0) {
+                echo json_encode(['success' => true, 'message' => 'Tarea actualizada']);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'No se realizaron cambios']);
+            }
         } else {
-            echo json_encode(['success' => false, 'error' => 'No se pudo actualizar la tarea']);
+            echo json_encode(['success' => false, 'error' => 'No tienes permisos para modificar esta tarea']);
         }
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'error' => 'Error al conectar con MongoDB: ' . $e->getMessage()]);
+        echo json_encode(['success' => false, 'error' => 'Error: ' . $e->getMessage()]);
     }
-} else {
-    echo json_encode(['success' => false, 'error' => 'Faltan datos necesarios']);
 }
 ?>
